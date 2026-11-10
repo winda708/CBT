@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CBT Sekolah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <?!= include('Stylesheet') ?>
+</head>
+<body>
+
+  <!-- Layar muat awal -->
+  <div id="boot" class="boot" role="status" aria-live="polite">
+    <div><div class="spinner-cb"></div><p class="muted fw-semibold mb-0">Memuat CBT Sekolah...</p></div>
+  </div>
+
+  <!-- ══════════ LOGIN ══════════ -->
+  <div id="vLogin" class="login-bg" hidden>
+    <div class="login-card">
+      <div class="text-center">
+        <div class="brand-logo" aria-hidden="true"><i class="bi bi-mortarboard-fill"></i></div>
+        <h1 class="h-lg" id="loginTitle">CBT Sekolah</h1>
+        <p class="muted mb-4">Sistem Asesmen Terintegrasi</p>
+      </div>
+      <div id="loginErr" class="err-inline" role="alert" hidden></div>
+      <form id="fLogin" novalidate>
+        <div class="mb-3">
+          <label class="form-label req" for="inUser">Username</label>
+          <input class="form-control" id="inUser" autocomplete="username" autocapitalize="none" required>
+        </div>
+        <div class="mb-4">
+          <label class="form-label req" for="inPass">Password</label>
+          <div class="input-group">
+            <input class="form-control" id="inPass" type="password" autocomplete="current-password" required>
+            <button class="btn btn-outline-secondary" type="button" id="btnEye" aria-label="Tampilkan password" style="min-width:48px"><i class="bi bi-eye"></i></button>
+          </div>
+        </div>
+        <button class="btn-cb amber lg block" type="submit" id="btnLogin"><i class="bi bi-box-arrow-in-right"></i> Masuk</button>
+      </form>
+      <p class="muted small-x text-center mt-4 mb-0">Lupa password? Hubungi admin sekolah.</p>
+    </div>
+  </div>
+
+  <!-- ══════════ APLIKASI (setelah login) ══════════ -->
+  <div id="app" hidden>
+    <header class="topbar">
+      <div class="topbar-in">
+        <a class="brand" href="javascript:void(0)" data-act="home" aria-label="Beranda">
+          <span class="brand-logo" id="brandLogo"><i class="bi bi-mortarboard-fill"></i></span>
+          <span><b>CBT Sekolah</b><small>Sistem Asesmen Terintegrasi</small></span>
+        </a>
+        <nav class="nav-cb" id="navCb" aria-label="Menu utama"></nav>
+        <div class="top-right">
+          <span class="chip" id="schoolChip"><i class="bi bi-building"></i> <span id="schoolName">Sekolah</span></span>
+          <button class="icon-btn" data-act="theme" aria-label="Ganti mode terang/gelap"><i class="bi bi-moon-stars" id="themeIco"></i></button>
+          <button class="icon-btn" data-act="bell" aria-label="Pemberitahuan ujian"><i class="bi bi-bell"></i><span id="bellDot" class="badge-pill orange" style="position:absolute;top:-4px;right:-4px;padding:1px 6px" hidden>0</span></button>
+          <div class="dropdown">
+            <button class="me" data-bs-toggle="dropdown" aria-label="Menu akun" aria-expanded="false">
+              <span class="avatar" id="meAv">U</span>
+              <span class="txt"><b id="meName">Pengguna</b><small id="meSub">-</small></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" style="border-radius:14px;min-width:200px">
+              <li><button class="dropdown-item py-2" data-act="pass"><i class="bi bi-key me-2"></i>Ganti Password</button></li>
+              <li><button class="dropdown-item py-2" data-act="theme"><i class="bi bi-moon-stars me-2"></i>Mode Gelap/Terang</button></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item py-2 text-danger" data-act="logout"><i class="bi bi-box-arrow-left me-2"></i>Keluar</button></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap" id="main">
+      <section id="vDash" class="view" aria-label="Dashboard Siswa"></section>
+      <section id="vUjian" class="view" aria-label="Ruang Ujian"></section>
+      <section id="vRuang" class="view" aria-label="Pengerjaan Ujian"></section>
+      <section id="vNilai" class="view" aria-label="Nilai Saya"></section>
+      <section id="vPortal" class="view" aria-label="Portal Belajar dan Game"></section>
+      <section id="vGuru" class="view" aria-label="Panel Guru"></section>
+    </main>
+
+    <nav class="bottom-nav" id="bottomNav" aria-label="Menu bawah"></nav>
+    <footer class="footer-cb">
+      <span><b>CBT Sekolah</b> © <span id="ftYear"></span> <span id="ftSchool"></span>. Seluruh hak cipta dilindungi.</span>
+      <span><i class="bi bi-wifi" style="color:var(--green-ink)"></i> <span id="netState">Server Aktif</span></span>
+    </footer>
+  </div>
+
+  <!-- ══════════ MODAL TETAP ══════════ -->
+  <div class="modal fade" id="mdlToken" tabindex="-1" aria-labelledby="mdlTokenT" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content p-2">
+      <div class="modal-header border-0"><h2 class="modal-title h-md" id="mdlTokenT"><i class="bi bi-key-fill me-2 text-warning"></i>Masukkan Token Ujian</h2><button class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button></div>
+      <div class="modal-body pt-0">
+        <p class="muted" id="tokenInfo"></p>
+        <label class="form-label visually-hidden-cb" for="inToken">Token ujian</label>
+        <input id="inToken" class="form-control text-center fw-bold" maxlength="12" autocomplete="off" autocapitalize="characters" style="font-size:26px;letter-spacing:.3em;min-height:60px;text-transform:uppercase" placeholder="TOKEN">
+        <div id="tokenErr" class="err-inline mt-3 mb-0" role="alert" hidden></div>
+      </div>
+      <div class="modal-footer border-0"><button class="btn-cb ghost" data-bs-dismiss="modal">Batal</button><button class="btn-cb primary" id="btnMulai"><i class="bi bi-play-fill"></i> Mulai Ujian</button></div>
+    </div></div>
+  </div>
+
+  <div class="modal fade" id="mdlSubmit" tabindex="-1" aria-labelledby="mdlSubmitT" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content p-2">
+      <div class="modal-header border-0"><h2 class="modal-title h-md" id="mdlSubmitT">Kumpulkan Ujian?</h2></div>
+      <div class="modal-body pt-0">
+        <p class="muted">Pastikan semua jawabanmu sudah benar. Setelah dikumpulkan, jawaban tidak dapat diubah.</p>
+        <div class="tally" id="submitTally"></div>
+        <div class="note-box mt-3" id="submitWarn" hidden></div>
+      </div>
+      <div class="modal-footer border-0"><button class="btn-cb primary" data-bs-dismiss="modal">Periksa Lagi</button><button class="btn-cb ghost" id="btnKumpul">Kumpulkan Sekarang</button></div>
+    </div></div>
+  </div>
+
+  <div class="modal fade" id="mdlHasil" tabindex="-1" aria-labelledby="mdlHasilT" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content p-3 text-center">
+      <h2 class="modal-title h-md mb-3" id="mdlHasilT">Ujian Selesai</h2>
+      <div id="hasilBody"></div>
+      <button class="btn-cb primary lg block mt-4" data-act="hasil-ok">Kembali ke Beranda</button>
+    </div></div>
+  </div>
+
+  <div class="modal fade" id="mdlPreview" tabindex="-1" aria-labelledby="mdlPreviewT" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-fullscreen-md-down"><div class="modal-content">
+      <div class="modal-header"><h2 class="modal-title h-md" id="mdlPreviewT">Pratinjau</h2><button class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button></div>
+      <div class="modal-body" id="previewBody"></div>
+      <div class="modal-footer"><button class="btn-cb ghost" data-bs-dismiss="modal"><i class="bi bi-x-lg"></i> Tutup</button><a id="previewOpen" class="btn-cb soft" href="#" target="_blank" rel="noopener noreferrer"><i class="bi bi-box-arrow-up-right"></i> Buka di tab baru</a></div>
+    </div></div>
+  </div>
+
+  <div class="modal fade" id="mdlConfirm" tabindex="-1" aria-labelledby="mdlConfirmT" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+      <div class="modal-header"><h2 class="modal-title h-md" id="mdlConfirmT">Konfirmasi</h2><button class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button></div>
+      <div class="modal-body" id="confirmBody"></div>
+      <div class="modal-footer"><button class="btn-cb ghost" data-bs-dismiss="modal">Batal</button><button class="btn-cb danger" id="btnConfirmYes">Ya, lanjutkan</button></div>
+    </div></div>
+  </div>
+
+  <!-- Modal dinamis untuk semua formulir (diisi oleh JavaScript) -->
+  <div class="modal fade" id="mdlDyn" tabindex="-1" aria-labelledby="dynT" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg modal-fullscreen-sm-down"><div class="modal-content">
+      <div class="modal-header"><h2 class="modal-title h-md" id="dynT">Form</h2><button class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button></div>
+      <div class="modal-body" id="dynBody"></div>
+      <div class="modal-footer"><button class="btn-cb ghost" data-bs-dismiss="modal">Batal</button><button class="btn-cb primary" id="dynSave"><i class="bi bi-check2"></i> Simpan</button></div>
+    </div></div>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+  <?!= include('JavaScript') ?>
+</body>
+</html>
